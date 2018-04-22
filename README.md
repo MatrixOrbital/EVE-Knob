@@ -1,6 +1,6 @@
 A small quantity of joy is added to the Universe each time a knob is spun.
 
-Using the AS5048B from AMS allows the knob to rotate freely and infinitely while reading the position via I2C. AMS makes a handy and inexpensive eval-board which is available from Mouser: 985-AS5048A-TS_EK_AB
+Using the AS5048B from AMS allows the knob to rotate freely and infinitely while reading the position via I2C. AMS makes a handy and inexpensive eval-board which is available from Mouser: [985-AS5048A-TS_EK_AB](https://www.mouser.com/ProductDetail/ams/AS5048B-TS_EK_AB?qs=%2fha2pyFadujZZKz1OfAGsHrNpvDGr%252bCw2bjn7ei0D4lkCfqSNlRtkoUgtMJtRFAa)
 
 In essence, this is a rotational encoder capable of 1/20th degree resolution (7300 counts per revolution). The technology is also useful in robotics to quantify wheel rotation or joint extension.
 
