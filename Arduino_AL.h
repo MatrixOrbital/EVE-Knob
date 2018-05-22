@@ -18,6 +18,7 @@ extern "C" {
 #define EvePDN_PIN            8  // PB0
 #define SDChipSelect_PIN      3  // PD3
 #define SDCardDetect_PIN      4  // PD4
+#define Servo_PWM_PIN         6 
 
 // AS5048 Chip
 #define AS5048_REG_ANG      0xFE   
@@ -25,7 +26,7 @@ extern "C" {
 
 // The rate of reading the angle is important in order to prevent misinterpretting the direction of movement.
 // Make the rate high enough that the knob cannot possibly rotate by 180 degrees between samples.
-#define CheckSensorInterval 10  // in mS - The need for fast AS5048 samples and Eve refresh limits converge here
+#define CheckSensorInterval 3  // in mS - The need for fast AS5048 samples and Eve refresh limits converge here
 
 // Notes:
 // In Arduino we lose access to these defines from outside the .ino, so they are redfined here.

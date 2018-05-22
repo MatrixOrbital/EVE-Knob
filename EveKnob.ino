@@ -15,6 +15,13 @@ void setup()
   FT81x_Init();
   SD_Init();
 
+  //---------------------------------------------- Set PWM frequency for D6, D7 & D8 ---------------------------
+  // This affects millis() such that each count of millis() is actually 4mS
+  
+  // TCCR0B = TCCR0B & B11111000 | B00000011;     // set timer 0 divisor to 64 for PWM frequency of 490.20 Hz - default
+  TCCR0B = TCCR0B & B11111000 | B00000100;         // set timer 0 divisor to 256 for PWM frequency of 122.55 Hz
+  TCCR0A = _BV(COM0A1) | _BV(COM0B1) | _BV(WGM00); // Phase correct half speed PWM
+ 
   if (!LoadTouchMatrix())
   {
     // We failed to read calibration matrix values from the SD card.
@@ -26,13 +33,9 @@ void setup()
   Load_JPG(RAM_G, 0, "Gauge240.jpg");
   Load_JPG(RAM_G + 0x40000UL, 0, "L238x65.jpg");
   MakeScreen_Gauge(0);
+  wr8(REG_PWM_DUTY + RAM_REG, 128);      // set backlight
 
-  // Slowly turn up the backlight for "dramatic effect"
-  for(uint8_t duty = 0; duty <= 128; duty++)
-  {
-    wr8(REG_PWM_DUTY + RAM_REG, duty);      // set backlight
-    delay(15);
-  }
+  analogWrite(Servo_PWM_PIN, 0);             // Set Servo to 0 value to match gauge
   
   MainLoop(); // jump to "main()"
 }
@@ -48,7 +51,7 @@ void MainLoop(void)
   uint32_t Time2CheckSensor = 100;
   uint32_t Angle, PrevAngle;
   uint32_t DiffTest, AngleDiff;
-  int32_t Turn, Value = 0;
+  int32_t Turn, ServoVal, Value = 0;
 
   Angle = PrevAngle = AS5048_GetRaw();  // Initialize the working values
 
@@ -58,7 +61,7 @@ void MainLoop(void)
     {
       // Read the angle
       Angle = AS5048_GetRaw();
-      Log("Angle = %ld\n", Angle);
+//      Log("Angle = %ld\n", Angle);
       
       // Detect the direction and magnitude of the change in angle. 
       // We assume that the knob is not capable of being turned more than half a rotation in the sample time
@@ -113,8 +116,14 @@ void MainLoop(void)
         Value = 0;
       if (Value > 10000)
         Value = 10000;
-        
+
       MakeScreen_Gauge(Value);
+
+      // good values which move servo are from 16 to 83 or 67 counts 
+      ServoVal = Value/149 + 16;
+//    Log("servo %d\n", ServoVal);
+      analogWrite(Servo_PWM_PIN, ServoVal);             // Set Servo to match gauge - 10000/149 = 67
+
       Time2CheckSensor = millis() + CheckSensorInterval;
     }
   }
@@ -148,7 +157,10 @@ void GlobalInit(void)
   digitalWrite(EveChipSelect_PIN, HIGH);  // Deselect Eve
   pinMode(EveAudioEnable_PIN, OUTPUT);    // Audio Enable PIN
   digitalWrite(EveAudioEnable_PIN, LOW);  // Disable Audio
+  pinMode(Servo_PWM_PIN, OUTPUT);         // Setup PWM pin for servo
+
   SPI.begin();                            // Enable SPI
+  Log("Startup\n");
 }
 
 // Send a single byte through SPI

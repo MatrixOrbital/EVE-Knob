@@ -7,7 +7,7 @@
 
 void MakeScreen_Gauge(uint16_t Val)
 {
-  Log("Enter NiceGauge\n");
+//  Log("Enter NiceGauge\n");
 
   Send_CMD(CMD_DLSTART);
   Send_CMD(CLEAR(1,1,1));

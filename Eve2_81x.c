@@ -39,8 +39,9 @@
 // Be aware that Eve stores only the offset into the "FIFO" as 16 bits, so any use of the offset 
 // requires adding the base address (RAM_CMD 0x308000) to the resultant 32 bit value.
 
-#include <stdint.h>              // Find integer types like "uint8_t"  
+#include <stdint.h>               // Find integer types like "uint8_t"  
 #include "Eve2_81x.h"             // Header for this file with prototypes, defines, and typedefs
+#include "MatrixEve2Conf.h"       // Display panel setup parameters for Matrix Orbital Eve2 modules
 
 // For Propeller, include this:
 //#include "simpletools.h"         // Include simple tools for access to common libraries functions
