@@ -29,3 +29,5 @@ In essence, this is a rotational encoder capable of 1/20th degree resolution (73
   Support Forums
   
   http://www.lcdforums.com/forums/viewforum.php?f=45
+  
+  <img src=Cover.jpg></img>
